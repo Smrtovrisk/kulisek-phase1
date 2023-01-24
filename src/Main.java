@@ -1,16 +1,12 @@
 
-
-
 public class Main {
-	
-	
 
+	public static void main(String[] args) throws Exception {
 
-	public static void main(String[] args) {
-		
-		  Menu menu = new Menu();
+		System.out.println("Welcome to demo Application of FSD course, Phase 1");
+		System.out.println("Author: Martin Kulisek, martin.kulisek@vodafone.com");
 
-		menu.main();
+		Menu.main();
 
 	}
 
