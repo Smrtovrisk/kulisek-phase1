@@ -1,26 +1,27 @@
-import java.util.Scanner;
-
 public class Menu {
-	public static void print(String textToPrint) {
-		System.out.println(textToPrint);
+
+	public static boolean isNumeric(String str) {
+		try {
+			Double.parseDouble(str);
+			return true;
+		} catch (NumberFormatException e) {
+			return false;
+		}
 	}
 
 	static void main() throws Exception {
-		print(" ");
-		print("-------------------(MAIN-MENU)--------------------");
-		print("You can choose from these options:");
-		print("(1) List Folder");
-		print("(2) File operations");
-		print("(3) Exit");
+		TextUtils.printMainMenu();
 
-		Scanner reader = new Scanner(System.in);
-		System.out.print("Enter number: ");
-		String userResponse = reader.nextLine();
+		String userResponse = TextUtils.readPrompt();
 
-		if (userResponse.length() > 0) {
+		if (userResponse.length() > 0 && isNumeric(userResponse)) {
+
 			byte parsed = Byte.parseByte(userResponse);
 
 			primaryMenu(parsed);
+		} else {
+			TextUtils.printWrongInput();
+			main();
 		}
 	}
 
@@ -29,9 +30,7 @@ public class Menu {
 		if (action == 1) {
 			Files.listFolder();
 
-			Scanner reader = new Scanner(System.in);
-			System.out.print("Press ENTER to go back to main menu: ");
-			String userResponse = reader.nextLine();
+			String userResponse = TextUtils.readPrompt("~Press enter to exit");
 
 			if (userResponse.length() >= 0) {
 				main();
@@ -39,38 +38,38 @@ public class Menu {
 		} else if (action == 2) {
 			secondaryMenu();
 		} else if (action == 3) {
-			print("Exiting application..");
+			TextUtils.print("~Exiting application..");
 			System.exit(0);
 		} else {
-			print("You have not chosen option correctly!");
+			TextUtils.printWrongInput();
+			main();
 		}
 
 	}
 
 	static void secondaryMenu() throws Exception {
-		print(" ");
-		print("-----------------(FILE-OPERATIONS)------------------");
-		print("You can choose from these options or press ENTER to go back:");
-		print("(1) Add file");
-		print("(2) Remove file");
-		print("(3) Search File");
-		Scanner reader = new Scanner(System.in);
-		System.out.print("Enter number: ");
-		String userResponse = reader.nextLine();
+		TextUtils.printSecondaryMenu();
+		String userResponse = TextUtils.readPrompt();
 
-		if (userResponse.length() > 0) {
-			byte parsed = Byte.parseByte(userResponse);
-			if (parsed == 1) {
-				Files.addFile();
-			} else if (parsed == 2) {
-				Files.removeFile();
-			} else if (parsed == 3) {
-				Files.searchFile();
-			} else {
-				print("You have not chosen option correctly!");
-			}
-		} else {
+		if (userResponse.length() == 0) {
 			main();
+		} else {
+			if (!isNumeric(userResponse)) {
+				TextUtils.printWrongInput();
+				secondaryMenu();
+			}
+			byte parsed = Byte.parseByte(userResponse);
+			switch (parsed) {
+			case 1:
+				Files.addFile();
+				break;
+			case 2:
+				Files.removeFile();
+				break;
+			case 3:
+				Files.searchFile();
+				break;
+			}
 		}
 	}
 
